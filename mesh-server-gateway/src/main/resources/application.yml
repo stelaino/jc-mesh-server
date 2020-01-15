@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: mesh-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos.me:8848
+
+    gateway:
+      routes:
+        - id: PROVIDER-SERVICE
+          uri: lb://provider
+          predicates:
+            - Path=/api/provider/**
+          filters:
+            - StripPrefix=1
+
+        - id: CONSUMER-SERVICE
+          uri: lb://consumer
+          predicates:
+            - Path=/api/consumer/**
+          filters:
+            - StripPrefix=1
+server:
+  port: 8888
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
